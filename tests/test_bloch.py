@@ -17,9 +17,16 @@ def test_matches_analytic_solution():
 
 
 def test_radiation_damping_analytic():
-    # No relaxation, on resonance, start after a 90-degree pulse:
-    # exact solution Mx = sech(t/tau), Mz = tanh(t/tau)
     tau = 0.02
     t, (Mx, My, Mz) = simulate([1.0, 0.0, 0.0], 0.2, 0.0, 1e9, 1e9, tau_rd=tau)
     assert np.allclose(Mx, 1 / np.cosh(t / tau), atol=1e-6)
     assert np.allclose(Mz, np.tanh(t / tau), atol=1e-6)
+
+
+
+def test_raser_steady_state():
+    T1, T2, tau, Mz_eq = 5.0, 1.0, 0.2, -1.0
+    t, (Mx, My, Mz) = simulate([1e-3, 0.0, -1.0], 200.0, 0.0, T1, T2,
+                               tau_rd=tau, Mz_eq=Mz_eq)
+    assert abs(Mz[-1] - (-tau / T2)) < 1e-4
+    assert abs(np.hypot(Mx[-1], My[-1]) - np.sqrt(tau * (-tau / T2 - Mz_eq) / T1)) < 1e-4
