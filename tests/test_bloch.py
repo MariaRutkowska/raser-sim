@@ -12,3 +12,14 @@ def test_matches_analytic_solution():
     t, (Mx, My, Mz) = simulate([1.0, 0.0, 0.0], 5.0, delta, T1, T2)
     assert np.allclose(Mx, np.cos(delta * t) * np.exp(-t / T2), atol=1e-6)
     assert np.allclose(Mz, 1 - np.exp(-t / T1), atol=1e-6)
+
+
+
+
+def test_radiation_damping_analytic():
+    # No relaxation, on resonance, start after a 90-degree pulse:
+    # exact solution Mx = sech(t/tau), Mz = tanh(t/tau)
+    tau = 0.02
+    t, (Mx, My, Mz) = simulate([1.0, 0.0, 0.0], 0.2, 0.0, 1e9, 1e9, tau_rd=tau)
+    assert np.allclose(Mx, 1 / np.cosh(t / tau), atol=1e-6)
+    assert np.allclose(Mz, np.tanh(t / tau), atol=1e-6)
