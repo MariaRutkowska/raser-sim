@@ -30,3 +30,15 @@ def test_raser_steady_state():
                                tau_rd=tau, Mz_eq=Mz_eq)
     assert abs(Mz[-1] - (-tau / T2)) < 1e-4
     assert abs(np.hypot(Mx[-1], My[-1]) - np.sqrt(tau * (-tau / T2 - Mz_eq) / T1)) < 1e-4
+
+
+
+
+
+def test_one_line_raser_matches_bloch():
+    from src.raser2 import raser_rhs
+    from src.bloch import bloch_rhs
+    y = np.array([0.1, -0.05, -0.7])
+    a = raser_rhs(0, y, np.array([3.0]), 5.0, 1.0, 0.2, np.array([-1.0]))
+    b = bloch_rhs(0, y, 3.0, 5.0, 1.0, tau_rd=0.2, Mz_eq=-1.0)
+    assert np.allclose(a, b)
