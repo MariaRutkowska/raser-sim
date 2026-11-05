@@ -2,11 +2,6 @@ import numpy as np
 from scipy.integrate import solve_ivp
 
 def bloch_rhs(t, M, delta, T1, T2, M0=1.0, tau_rd=np.inf, Mz_eq=None):
-    """Right-hand side of the Bloch equations (no RF pulse).
-
-    M = [Mx, My, Mz]. delta = offset from the rotating frame (rad/s).
-    tau_rd = radiation-damping time (s); np.inf switches it off.
-    """
     if Mz_eq is None:
         Mz_eq = M0
     Mx, My, Mz = M

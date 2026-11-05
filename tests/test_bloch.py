@@ -33,8 +33,6 @@ def test_raser_steady_state():
 
 
 
-
-
 def test_one_line_raser_matches_bloch():
     from src.raser2 import raser_rhs
     from src.bloch import bloch_rhs
@@ -42,3 +40,12 @@ def test_one_line_raser_matches_bloch():
     a = raser_rhs(0, y, np.array([3.0]), 5.0, 1.0, 0.2, np.array([-1.0]))
     b = bloch_rhs(0, y, 3.0, 5.0, 1.0, tau_rd=0.2, Mz_eq=-1.0)
     assert np.allclose(a, b)
+
+
+
+def test_lorentzian_threshold_matches_t2star_rule():
+    from src.raser2 import offsets, linear_threshold
+    T2, tau, fwhm = 3.0, 0.2, 0.3
+    T2_star = 1 / (1 / T2 + np.pi * fwhm)
+    th = linear_threshold(offsets("lorentzian", fwhm, 2001), T2, tau)
+    assert abs(th - (-tau / T2_star)) < 1e-3
