@@ -32,7 +32,7 @@ fig, ax = plt.subplots(figsize=(7, 4))
 for shape, ths in results.items():
     ax.semilogx(ns, -np.array(ths), "o-", ms=5, label=shape)
 ax.axhline(tau_rd / T2_star, color=PLUM, ls="--", lw=1.2, label="simple rule τ_rd/T2*")
-ax.axvline(101, color=PLUM, ls=":", lw=1, label="used in lesson 6 (101)")
+ax.axvline(101, color=PLUM, ls=":", lw=1, label="101 groups used in the simulations")
 ax.set(xlabel="Number of spin groups", ylabel="Threshold pumping (−Mz_eq)",
        title="The result stops changing after ~20 groups")
 ax.legend(fontsize=8)
